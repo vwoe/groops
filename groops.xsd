@@ -9418,67 +9418,67 @@
 	</xs:complexType>
 	<xs:complexType name="programType">
 		<xs:annotation>
-			<xs:appinfo>rename: CovarianceFunction2PSD = CovarianceFunction2PowerSpectralDensity</xs:appinfo>
-			<xs:appinfo>rename: CovariancePsd2CovarianceFunction = PowerSpectralDensity2CovarianceFunction</xs:appinfo>
-			<xs:appinfo>rename: GnssAntennaDefinition2Representation = GnssAntennaDefinition2ParameterVector</xs:appinfo>
-			<xs:appinfo>rename: GnssAntennaDefinition2GriddedData = GnssAntennaDefinition2Skyplot</xs:appinfo>
-			<xs:appinfo>rename: GnssAntennaRepresentationConstraint = GnssAntennaNormalsConstraint</xs:appinfo>
-			<xs:appinfo>rename: GnssResiduals2AntennaDefinition = GnssResiduals2AccuracyDefinition</xs:appinfo>
-			<xs:appinfo>rename: GnssResiduals2GriddedData = GnssResiduals2Skyplot</xs:appinfo>
-			<xs:appinfo>rename: GnssCreateStationInfo = GnssStationInfoCreate</xs:appinfo>
-			<xs:appinfo>rename: GnssRepresentation2AntennaDefinition = ParameterVector2GnssAntennaDefinition</xs:appinfo>
-			<xs:appinfo>rename: Gravityfield2DegreeAmplitudeTimeSeries = Gravityfield2DegreeAmplitudesPlotGrid</xs:appinfo>
-			<xs:appinfo>rename: DisplacementTimeSeries = Gravityfield2DisplacementTimeSeries</xs:appinfo>
-			<xs:appinfo>rename: GravityfieldReplaceC20 = GravityfieldReplacePotentialCoefficients</xs:appinfo>
-			<xs:appinfo>rename: Grid2Matrix = GriddedData2Matrix</xs:appinfo>
-			<xs:appinfo>rename: Grid2File = GriddedDataCreate</xs:appinfo>
-			<xs:appinfo>rename: GridMatrix2GriddedData = Matrix2GriddedData</xs:appinfo>
-			<xs:appinfo>rename: AsciiMatrix2GridRectangular = MatrixRectangular2GriddedData</xs:appinfo>
-			<xs:appinfo>rename: InstrumentComputeAllanVariance = Instrument2AllanVariance</xs:appinfo>
-			<xs:appinfo>rename: InstrumentComputeCorrelation = Instrument2CrossCorrelationFunction</xs:appinfo>
-			<xs:appinfo>rename: InstrumentComputeHistogram = Instrument2Histogram</xs:appinfo>
-			<xs:appinfo>rename: InstrumentComputePSD = Instrument2PowerSpectralDensity</xs:appinfo>
-			<xs:appinfo>rename: InstrumentComputePsd = Instrument2PowerSpectralDensity</xs:appinfo>
-			<xs:appinfo>rename: InstrumentComputeScaleogram = Instrument2Scaleogram</xs:appinfo>
-			<xs:appinfo>rename: InstrumentComputeSpectralCoherence = Instrument2SpectralCoherence</xs:appinfo>
-			<xs:appinfo>rename: InstrumentComputeSpectrogram = Instrument2Spectrogram</xs:appinfo>
-			<xs:appinfo>rename: InstrumentAccelerometerEstimatedParameter = InstrumentAccelerometerApplyEstimatedParameters</xs:appinfo>
-			<xs:appinfo>rename: ArcConcatenate = InstrumentConcatenate</xs:appinfo>
-			<xs:appinfo>rename: InstrumentMatrix2Instrument = InstrumentSetType</xs:appinfo>
-			<xs:appinfo>rename: ArcSynchronize = InstrumentSynchronize</xs:appinfo>
-			<xs:appinfo>rename: SimulateLocalLevelFrame = LocalLevelFrame2StarCamera</xs:appinfo>
-			<xs:appinfo>rename: KernelComputeCoefficients = Kernel2Coefficients</xs:appinfo>
-			<xs:appinfo>rename: KernelDegreeVariances = RadialBasisSplines2KernelCoefficients</xs:appinfo>
-			<xs:appinfo>rename: InstrumentCreateTimeSeries = TimeSeriesCreate</xs:appinfo>
-			<xs:appinfo>rename: Variational2Orbit = Variational2OrbitAndStarCamera</xs:appinfo>
-			<xs:appinfo>rename: KalmanStaticTemporalNormals = NormalsBuildShortTimeStaticLongTime</xs:appinfo>
-			<xs:appinfo>rename: NormalsParameterSelection2IndexVector = ParameterSelection2IndexVector</xs:appinfo>
-			<xs:appinfo>rename: InstrumentOrbit2ArgumentOfLatitude = Orbit2ArgumentOfLatitude</xs:appinfo>
-			<xs:appinfo>rename: InstrumentOrbit2BetaPrimeAngle = Orbit2BetaPrimeAngle</xs:appinfo>
-			<xs:appinfo>rename: InstrumentOrbit2EclipseFactor = Orbit2EclipseFactor</xs:appinfo>
-			<xs:appinfo>rename: ArcGroundtracks = Orbit2Groundtracks</xs:appinfo>
-			<xs:appinfo>rename: InstrumentOrbit2ThermosphericState = Orbit2ThermosphericState</xs:appinfo>
-			<xs:appinfo>rename: InstrumentOrbit2VelocityAcceleration = OrbitAddVelocityAndAcceleration</xs:appinfo>
-			<xs:appinfo>rename: NormalsSimulateNoise = NoiseNormalsSolution</xs:appinfo>
-			<xs:appinfo>rename: GroupProgramme = GroupPrograms</xs:appinfo>
-			<xs:appinfo>rename: IfProgramme = IfPrograms</xs:appinfo>
-			<xs:appinfo>rename: LoopProgramme = LoopPrograms</xs:appinfo>
-			<xs:appinfo>rename: GraceCsrAod2DoodsonHarmonics = GraceAod2DoodsonHarmonics</xs:appinfo>
-			<xs:appinfo>rename: Eop2003file = IersC04IAU2000EarthOrientationParameter</xs:appinfo>
-			<xs:appinfo>rename: IersRapidEop2Earthrotation = IersRapidIAU2000EarthOrientationParameter</xs:appinfo>
-			<xs:appinfo>rename: IGS2EarthRotation = Igs2EarthOrientationParameter</xs:appinfo>
-			<xs:appinfo>rename: Igs2InstrumentClock = GnssClockRinex2InstrumentClock</xs:appinfo>
-			<xs:appinfo>rename: GnssSinex2StationPosition = Sinex2StationPosition</xs:appinfo>
-			<xs:appinfo>rename: Tsxtdx2Orbit = Tsxtdx2Starcamera</xs:appinfo>
-			<xs:appinfo>rename: Tsxtdx2Starcamera = TerraSarTandem2StarCamera</xs:appinfo>
-			<xs:appinfo>rename: Kinematic2Orbit = BerneseKinematic2Orbit</xs:appinfo>
-			<xs:appinfo>rename: GraceCsrAod2TimeSplines = GraceAod2TimeSplines</xs:appinfo>
-			<xs:appinfo>rename: AsciiKinematic2OrbitCovariance = GroopsAscii2Orbit</xs:appinfo>
-			<xs:appinfo>rename: Orbit2Ascii = Orbit2GroopsAscii</xs:appinfo>
-			<xs:appinfo>rename: Orbit2Sp3 = Orbit2Sp3Format</xs:appinfo>
-			<xs:appinfo>rename: ReadOceanBottomPressurePSMSL = PsmslOceanBottomPressure2TimeSeries</xs:appinfo>
 			<xs:appinfo>rename: Sp3file2Orbit = Sp3Format2Orbit</xs:appinfo>
 			<xs:appinfo>rename: Igs2Orbit = Sp3Format2Orbit</xs:appinfo>
+			<xs:appinfo>rename: ReadOceanBottomPressurePSMSL = PsmslOceanBottomPressure2TimeSeries</xs:appinfo>
+			<xs:appinfo>rename: Orbit2Sp3 = Orbit2Sp3Format</xs:appinfo>
+			<xs:appinfo>rename: Orbit2Ascii = Orbit2GroopsAscii</xs:appinfo>
+			<xs:appinfo>rename: AsciiKinematic2OrbitCovariance = GroopsAscii2Orbit</xs:appinfo>
+			<xs:appinfo>rename: GraceCsrAod2TimeSplines = GraceAod2TimeSplines</xs:appinfo>
+			<xs:appinfo>rename: Kinematic2Orbit = BerneseKinematic2Orbit</xs:appinfo>
+			<xs:appinfo>rename: Tsxtdx2Starcamera = TerraSarTandem2StarCamera</xs:appinfo>
+			<xs:appinfo>rename: Tsxtdx2Orbit = Tsxtdx2Starcamera</xs:appinfo>
+			<xs:appinfo>rename: GnssSinex2StationPosition = Sinex2StationPosition</xs:appinfo>
+			<xs:appinfo>rename: Igs2InstrumentClock = GnssClockRinex2InstrumentClock</xs:appinfo>
+			<xs:appinfo>rename: IGS2EarthRotation = Igs2EarthOrientationParameter</xs:appinfo>
+			<xs:appinfo>rename: IersRapidEop2Earthrotation = IersRapidIAU2000EarthOrientationParameter</xs:appinfo>
+			<xs:appinfo>rename: Eop2003file = IersC04IAU2000EarthOrientationParameter</xs:appinfo>
+			<xs:appinfo>rename: GraceCsrAod2DoodsonHarmonics = GraceAod2DoodsonHarmonics</xs:appinfo>
+			<xs:appinfo>rename: LoopProgramme = LoopPrograms</xs:appinfo>
+			<xs:appinfo>rename: IfProgramme = IfPrograms</xs:appinfo>
+			<xs:appinfo>rename: GroupProgramme = GroupPrograms</xs:appinfo>
+			<xs:appinfo>rename: NormalsSimulateNoise = NoiseNormalsSolution</xs:appinfo>
+			<xs:appinfo>rename: InstrumentOrbit2VelocityAcceleration = OrbitAddVelocityAndAcceleration</xs:appinfo>
+			<xs:appinfo>rename: InstrumentOrbit2ThermosphericState = Orbit2ThermosphericState</xs:appinfo>
+			<xs:appinfo>rename: ArcGroundtracks = Orbit2Groundtracks</xs:appinfo>
+			<xs:appinfo>rename: InstrumentOrbit2EclipseFactor = Orbit2EclipseFactor</xs:appinfo>
+			<xs:appinfo>rename: InstrumentOrbit2BetaPrimeAngle = Orbit2BetaPrimeAngle</xs:appinfo>
+			<xs:appinfo>rename: InstrumentOrbit2ArgumentOfLatitude = Orbit2ArgumentOfLatitude</xs:appinfo>
+			<xs:appinfo>rename: NormalsParameterSelection2IndexVector = ParameterSelection2IndexVector</xs:appinfo>
+			<xs:appinfo>rename: KalmanStaticTemporalNormals = NormalsBuildShortTimeStaticLongTime</xs:appinfo>
+			<xs:appinfo>rename: Variational2Orbit = Variational2OrbitAndStarCamera</xs:appinfo>
+			<xs:appinfo>rename: InstrumentCreateTimeSeries = TimeSeriesCreate</xs:appinfo>
+			<xs:appinfo>rename: KernelDegreeVariances = RadialBasisSplines2KernelCoefficients</xs:appinfo>
+			<xs:appinfo>rename: KernelComputeCoefficients = Kernel2Coefficients</xs:appinfo>
+			<xs:appinfo>rename: SimulateLocalLevelFrame = LocalLevelFrame2StarCamera</xs:appinfo>
+			<xs:appinfo>rename: ArcSynchronize = InstrumentSynchronize</xs:appinfo>
+			<xs:appinfo>rename: InstrumentMatrix2Instrument = InstrumentSetType</xs:appinfo>
+			<xs:appinfo>rename: ArcConcatenate = InstrumentConcatenate</xs:appinfo>
+			<xs:appinfo>rename: InstrumentAccelerometerEstimatedParameter = InstrumentAccelerometerApplyEstimatedParameters</xs:appinfo>
+			<xs:appinfo>rename: InstrumentComputeSpectrogram = Instrument2Spectrogram</xs:appinfo>
+			<xs:appinfo>rename: InstrumentComputeSpectralCoherence = Instrument2SpectralCoherence</xs:appinfo>
+			<xs:appinfo>rename: InstrumentComputeScaleogram = Instrument2Scaleogram</xs:appinfo>
+			<xs:appinfo>rename: InstrumentComputePSD = Instrument2PowerSpectralDensity</xs:appinfo>
+			<xs:appinfo>rename: InstrumentComputePsd = Instrument2PowerSpectralDensity</xs:appinfo>
+			<xs:appinfo>rename: InstrumentComputeHistogram = Instrument2Histogram</xs:appinfo>
+			<xs:appinfo>rename: InstrumentComputeCorrelation = Instrument2CrossCorrelationFunction</xs:appinfo>
+			<xs:appinfo>rename: InstrumentComputeAllanVariance = Instrument2AllanVariance</xs:appinfo>
+			<xs:appinfo>rename: AsciiMatrix2GridRectangular = MatrixRectangular2GriddedData</xs:appinfo>
+			<xs:appinfo>rename: GridMatrix2GriddedData = Matrix2GriddedData</xs:appinfo>
+			<xs:appinfo>rename: Grid2File = GriddedDataCreate</xs:appinfo>
+			<xs:appinfo>rename: Grid2Matrix = GriddedData2Matrix</xs:appinfo>
+			<xs:appinfo>rename: GravityfieldReplaceC20 = GravityfieldReplacePotentialCoefficients</xs:appinfo>
+			<xs:appinfo>rename: DisplacementTimeSeries = Gravityfield2DisplacementTimeSeries</xs:appinfo>
+			<xs:appinfo>rename: Gravityfield2DegreeAmplitudeTimeSeries = Gravityfield2DegreeAmplitudesPlotGrid</xs:appinfo>
+			<xs:appinfo>rename: GnssRepresentation2AntennaDefinition = ParameterVector2GnssAntennaDefinition</xs:appinfo>
+			<xs:appinfo>rename: GnssCreateStationInfo = GnssStationInfoCreate</xs:appinfo>
+			<xs:appinfo>rename: GnssResiduals2GriddedData = GnssResiduals2Skyplot</xs:appinfo>
+			<xs:appinfo>rename: GnssResiduals2AntennaDefinition = GnssResiduals2AccuracyDefinition</xs:appinfo>
+			<xs:appinfo>rename: GnssAntennaRepresentationConstraint = GnssAntennaNormalsConstraint</xs:appinfo>
+			<xs:appinfo>rename: GnssAntennaDefinition2GriddedData = GnssAntennaDefinition2Skyplot</xs:appinfo>
+			<xs:appinfo>rename: GnssAntennaDefinition2Representation = GnssAntennaDefinition2ParameterVector</xs:appinfo>
+			<xs:appinfo>rename: CovariancePsd2CovarianceFunction = PowerSpectralDensity2CovarianceFunction</xs:appinfo>
+			<xs:appinfo>rename: CovarianceFunction2PSD = CovarianceFunction2PowerSpectralDensity</xs:appinfo>
 		</xs:annotation>
 		<xs:choice>
 			<xs:element name="AutoregressiveModel2CovarianceMatrix">
@@ -14807,6 +14807,44 @@
 							<xs:annotation>
 								<xs:documentation>file containing AR model for spatiotemporal constraint</xs:documentation>
 							</xs:annotation>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="Matrix2EmpiricalCovariance">
+				<xs:annotation>
+					<xs:documentation>Estimate the empirical covariance matrix of a matrix file</xs:documentation>
+					<xs:appinfo>tag: Matrix</xs:appinfo>
+					<xs:appinfo>tag: Covariance</xs:appinfo>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="outputfileCovarianceMatrix" type="filename"/>
+						<xs:element name="inputfileMatrix" type="filename" maxOccurs="unbounded"/>
+						<xs:element name="removeMean" type="boolean" minOccurs="0" default="1"/>
+						<xs:element name="differenceStep" type="uint" minOccurs="0" default="0">
+							<xs:annotation>
+								<xs:documentation>choose dt for: x,i(t) - x,j(t+dt)</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="regularize" minOccurs="0">
+							<xs:annotation>
+								<xs:documentation>add value to main diagonal</xs:documentation>
+							</xs:annotation>
+							<xs:complexType>
+								<xs:sequence>
+									<xs:element name="factorOfTrace" type="boolean" minOccurs="0" default="0">
+										<xs:annotation>
+											<xs:documentation>multiply factor with trace of matrix</xs:documentation>
+										</xs:annotation>
+									</xs:element>
+									<xs:element name="regularizationFactor" type="double" minOccurs="0" default="0.0">
+										<xs:annotation>
+											<xs:documentation>add to main diagonal</xs:documentation>
+										</xs:annotation>
+									</xs:element>
+								</xs:sequence>
+							</xs:complexType>
 						</xs:element>
 					</xs:sequence>
 				</xs:complexType>
@@ -22843,12 +22881,12 @@
 				<xs:element name="global">
 					<xs:annotation>
 						<xs:documentation>global settings</xs:documentation>
-						<xs:appinfo>rename: normalequationType = normalEquationType</xs:appinfo>
-						<xs:appinfo>rename: gnssAntennaRepresentationType = parametrizationGnssAntennaType</xs:appinfo>
-						<xs:appinfo>rename: parameterSatelliteType = parametrizationAccelerationType</xs:appinfo>
-						<xs:appinfo>rename: representationType = parametrizationGravityType</xs:appinfo>
-						<xs:appinfo>rename: parameterSatelliteTrackingType = parametrizationSatelliteTrackingType</xs:appinfo>
 						<xs:appinfo>rename: temporalRepresentationType = parametrizationTemporalType</xs:appinfo>
+						<xs:appinfo>rename: parameterSatelliteTrackingType = parametrizationSatelliteTrackingType</xs:appinfo>
+						<xs:appinfo>rename: representationType = parametrizationGravityType</xs:appinfo>
+						<xs:appinfo>rename: parameterSatelliteType = parametrizationAccelerationType</xs:appinfo>
+						<xs:appinfo>rename: gnssAntennaRepresentationType = parametrizationGnssAntennaType</xs:appinfo>
+						<xs:appinfo>rename: normalequationType = normalEquationType</xs:appinfo>
 					</xs:annotation>
 					<xs:complexType>
 						<xs:sequence>

@@ -4231,6 +4231,33 @@ Name & Type & Annotation\\
 This program is \reference{parallelized}{general.parallelization}.
 \clearpage
 %==================================
+\section{Programs: Matrix}
+\subsection{Matrix2EmpiricalCovariance}\label{Matrix2EmpiricalCovariance}
+This program estimates a spatial and temporal covariance matrix from a time series of \configFile{matrix}{matrix} files according to
+\begin{equation}
+\M\Sigma(\Delta i) = \frac{1}{N}\sum_{i=1}^N \M x_i \M x_{i+\Delta i}^T
+\end{equation}
+where $\Delta i$ is given by \config{differenceStep}.
+
+
+
+\keepXColumns
+\begin{tabularx}{\textwidth}{N T A}
+\hline
+Name & Type & Annotation\\
+\hline
+\hfuzz=500pt\includegraphics[width=1em]{element-mustset.pdf}~outputfileCovarianceMatrix & \hfuzz=500pt filename & \hfuzz=500pt \\
+\hfuzz=500pt\includegraphics[width=1em]{element-mustset-unbounded.pdf}~inputfileMatrix & \hfuzz=500pt filename & \hfuzz=500pt \\
+\hfuzz=500pt\includegraphics[width=1em]{element.pdf}~removeMean & \hfuzz=500pt boolean & \hfuzz=500pt \\
+\hfuzz=500pt\includegraphics[width=1em]{element.pdf}~differenceStep & \hfuzz=500pt uint & \hfuzz=500pt choose dt for: x,i(t) - x,j(t+dt)\\
+\hfuzz=500pt\includegraphics[width=1em]{element.pdf}~regularize & \hfuzz=500pt sequence & \hfuzz=500pt add value to main diagonal\\
+\hfuzz=500pt\includegraphics[width=1em]{connector.pdf}\includegraphics[width=1em]{element.pdf}~factorOfTrace & \hfuzz=500pt boolean & \hfuzz=500pt multiply factor with trace of matrix\\
+\hfuzz=500pt\includegraphics[width=1em]{connector.pdf}\includegraphics[width=1em]{element.pdf}~regularizationFactor & \hfuzz=500pt double & \hfuzz=500pt add to main diagonal\\
+\hline
+\end{tabularx}
+
+\clearpage
+%==================================
 \section{Programs: Misc}
 \subsection{DigitalFilter2FrequencyResponse}\label{DigitalFilter2FrequencyResponse}
 Compute amplitude-, phase-, group delay and frequency response of a \configClass{digitalFilter}{digitalFilterType} cascade.
