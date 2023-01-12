@@ -11970,6 +11970,62 @@
 					</xs:sequence>
 				</xs:complexType>
 			</xs:element>
+			<xs:element name="Gravityfield2GriddedTimeVariabilityAnalysis">
+				<xs:annotation>
+					<xs:documentation>Analyse time variability at grid points</xs:documentation>
+					<xs:appinfo>tag: Gravityfield</xs:appinfo>
+					<xs:appinfo>tag: Grid</xs:appinfo>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="outputfileGriddedData" type="filename"/>
+						<xs:element name="grid" type="gridType" maxOccurs="unbounded"/>
+						<xs:element name="kernel" type="kernelType"/>
+						<xs:element name="gravityfield" type="gravityfieldType" maxOccurs="unbounded"/>
+						<xs:element name="referencefield" type="gravityfieldType" maxOccurs="unbounded">
+							<xs:annotation>
+								<xs:documentation>gravity field to compare to</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="functional">
+							<xs:annotation>
+								<xs:documentation>correlation coefficient with respect to reference field</xs:documentation>
+							</xs:annotation>
+							<xs:complexType>
+								<xs:choice>
+									<xs:element name="correlationCoefficient"/>
+									<xs:element name="errorRMS">
+										<xs:annotation>
+											<xs:documentation>error rms with respect to reference field</xs:documentation>
+										</xs:annotation>
+									</xs:element>
+									<xs:element name="NSC">
+										<xs:annotation>
+											<xs:documentation>Nash-Sutcliffe-Coefficient with respect to reference field</xs:documentation>
+										</xs:annotation>
+									</xs:element>
+									<xs:element name="percentage">
+										<xs:annotation>
+											<xs:documentation>Percentage of reference field explained by signal</xs:documentation>
+										</xs:annotation>
+									</xs:element>
+								</xs:choice>
+							</xs:complexType>
+						</xs:element>
+						<xs:element name="timeSeries" type="timeSeriesType" maxOccurs="unbounded"/>
+						<xs:element name="R" type="double" minOccurs="0" default="6378137.0">
+							<xs:annotation>
+								<xs:documentation>reference radius for ellipsoidal coordinates on output</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="inverseFlattening" type="double" minOccurs="0" default="298.2572221010">
+							<xs:annotation>
+								<xs:documentation>reference flattening for ellipsoidal coordinates on output, 0: spherical coordinates</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
 			<xs:element name="Gravityfield2PotentialCoefficients">
 				<xs:annotation>
 					<xs:documentation>writes a gravity field to a file with potential coefficients</xs:documentation>
