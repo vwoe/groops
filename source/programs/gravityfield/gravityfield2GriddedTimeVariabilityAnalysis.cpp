@@ -5,7 +5,7 @@
 * @brief Analyse time variability of gravity field with respect to reference signal.
 *
 * @author Torsten Mayer-Guerr
-* @date 2009-05-19
+* @date 2009-05-19, adapted to github-groops: 2023-01-16 VW
 *
 */
 /***********************************************/
@@ -13,11 +13,11 @@
 // Latex documentation
 #define DOCSTRING docstring
 static const char *docstring = R"(
-This programm computes a time series of functionals of a \class{gravityfield}{gravityfieldType}
-on each point at a given \class{grid}{gridType}. The type of functional (e.g gravity anomalies or geoid heights)
-can be choosen with \class{kernel}{kernelType}. At each grid point the error root mean square (RMS),
+This programm computes a time series of functionals of a \configClass{gravityfield}{gravityfieldType}
+on each point at a given \configClass{grid}{gridType}. The type of functional (e.g gravity anomalies or geoid heights)
+can be choosen with \configClass{kernel}{kernelType}. At each grid point the error root mean square (RMS),
 the correlation coefficient or the Nash-Sutcliffe coefficient (NSC) will be computed frome the time series
-with respect to the \config{referencefield}. The functional will be saved together with points expressed
+with respect to the referencefield. The functional will be saved together with points expressed
 as ellipsoidal coordinates (longitude, latitude, height) based on a reference ellipsoid with parameters \config{R}
 and \config{inverseFlattening}. To speed up the computation the gravity field will be converted to
 spherical harmonics before the computation.
@@ -47,7 +47,7 @@ public:
   void run(Config &config, Parallel::CommunicatorPtr comm);
 };
 
-GROOPS_REGISTER_PROGRAM(Gravityfield2GriddedTimeVariabilityAnalysis, PARALLEL, "Analyse time variability at grid points", Gravityfield, Grid)
+GROOPS_REGISTER_PROGRAM(Gravityfield2GriddedTimeVariabilityAnalysis, SINGLEPROCESS, "Analyse time variability at grid points", Gravityfield, Grid)
 
 /***********************************************/
 
@@ -96,17 +96,14 @@ void Gravityfield2GriddedTimeVariabilityAnalysis::run(Config &config, Parallel::
     std::vector<Double> mean(points.size(), 0);
     std::vector<Double> refmean(points.size(), 0);
 
-    //logTimerStart;
-    for(UInt i=0; i<count; i++)
+    Single::forEach(times.size(), [&](UInt i)
     {
-      //logTimerLoop(i,count);
       SphericalHarmonics harm = gravityfield->sphericalHarmonics(times.at(i));
       field.at(i) = MiscGriddedData::synthesisSphericalHarmonics(harm, points, kernel, comm);
 
       harm = referencefield->sphericalHarmonics(times.at(i));
       reffield.at(i) = MiscGriddedData::synthesisSphericalHarmonics(harm, points, kernel, comm);
-    }
-    //logTimerLoopEnd(count);
+    });
 
     if(Parallel::isMaster(comm))
     {
@@ -115,17 +112,14 @@ void Gravityfield2GriddedTimeVariabilityAnalysis::run(Config &config, Parallel::
       logStatus<<"compute mean"<<Log::endl;
       std::vector<Double> mean(points.size(), 0);
       std::vector<Double> refmean(points.size(), 0);
-      //logTimerStart;
-      for(UInt i=0; i<count; i++)
+      Single::forEach(times.size(), [&](UInt i)
       {
-        //logTimerLoop(i,count);
         for(UInt k=0; k<points.size(); k++)
           mean.at(k) += field.at(i).at(k)/count;
         for(UInt k=0; k<points.size(); k++)
           refmean.at(k) += reffield.at(i).at(k)/count;
-        }
+        });
       }
-      //logTimerLoopEnd(count);
 
       std::vector<Double> values(points.size(), 0);
       switch(functional)
@@ -137,18 +131,15 @@ void Gravityfield2GriddedTimeVariabilityAnalysis::run(Config &config, Parallel::
           std::vector<Double> refrms(points.size(), 0);
           std::vector<Double> crossrms(points.size(), 0);
 
-          //logTimerStart;
-          for(UInt i=0; i<count; i++) // Alle Zeitpunkt)
+          Single::forEach(times.size(), [&](UInt i)
           {
-            //logTimerLoop(i,count);
             for(UInt k=0; k<points.size(); k++)
             {
               rms.at(k) += pow(field.at(i).at(k)-mean.at(k), 2)/count;
               refrms.at(k) += pow(reffield.at(i).at(k)-refmean.at(k), 2)/count;
               crossrms.at(k) += (field.at(i).at(k)-mean.at(k))*(reffield.at(i).at(k)-refmean.at(k))/count;
             }
-          }
-          //logTimerLoopEnd(count);
+          });
 
           for(UInt k=0; k<points.size(); k++)
             values.at(k) = crossrms.at(k)/sqrt(rms.at(k)*refrms.at(k));
@@ -159,14 +150,11 @@ void Gravityfield2GriddedTimeVariabilityAnalysis::run(Config &config, Parallel::
           logStatus<<"compute error rms"<<Log::endl;
           std::vector<Double> rms(points.size(), 0);
 
-          //logTimerStart;
-          for(UInt i=0; i<count; i++) // Alle Zeitpunkt)
+          Single::forEach(times.size(), [&](UInt i)
           {
-            //logTimerLoop(i,count);
             for(UInt k=0; k<points.size(); k++)
               rms.at(k) += pow((field.at(i).at(k)-mean.at(k))-(reffield.at(i).at(k)-refmean.at(k)), 2)/count;
-          }
-          //logTimerLoopEnd(count);
+          });
 
           for(UInt k=0; k<points.size(); k++)
             values.at(k) = sqrt(rms.at(k));
@@ -178,17 +166,14 @@ void Gravityfield2GriddedTimeVariabilityAnalysis::run(Config &config, Parallel::
           std::vector<Double> sum1(points.size(), 0);
           std::vector<Double> sum2(points.size(), 0);
 
-          //logTimerStart;
-          for(UInt i=0; i<count; i++) // Alle Zeitpunkte
+          Single::forEach(times.size(), [&](UInt i)
           {
-            //logTimerLoop(i,count);
             for(UInt k=0; k<points.size(); k++)
             {
               sum1.at(k) += pow(field.at(i).at(k)-reffield.at(i).at(k),2);
               sum2.at(k) +=  pow(field.at(i).at(k)-mean.at(k), 2);
             }
-          }
-          //logTimerLoopEnd(count);
+          });
 
           for(UInt k=0; k<points.size(); k++)
             values.at(k) = 1 - sum1.at(k)/sum2.at(k);
@@ -200,17 +185,14 @@ void Gravityfield2GriddedTimeVariabilityAnalysis::run(Config &config, Parallel::
           std::vector<Double> diffrms(points.size(), 0);
           std::vector<Double> refrms(points.size(), 0);
 
-          //logTimerStart;
-          for(UInt i=0; i<count; i++)
+          Single::forEach(times.size(), [&](UInt i)
           {
-            //logTimerLoop(i,count);
             for(UInt k=0; k<points.size(); k++)
             {
               diffrms.at(k) += pow((field.at(i).at(k)-mean.at(k)) - (reffield.at(i).at(k)-refmean.at(k)), 2)/count;
               refrms.at(k) += pow(reffield.at(i).at(k)-refmean.at(k), 2)/count;
             }
-          }
-          //logTimerLoopEnd(count);
+          });
 
           for(UInt k=0; k<points.size(); k++)
             values.at(k) = 1 - (diffrms.at(k)/refrms.at(k));
@@ -221,8 +203,7 @@ void Gravityfield2GriddedTimeVariabilityAnalysis::run(Config &config, Parallel::
       logStatus<<"save values to file <"<<outName<<">"<<Log::endl;
 	  GriddedData griddedData(Ellipsoid(a,f), points, areas, {values});
       writeFileGriddedData(outName, griddedData);
-	  
-      //writeFileValueGrid(outName, ValueGrid(Ellipsoid(a,f), points, areas, values));
+
     }
   catch(std::exception &e)
   {

@@ -2005,6 +2005,44 @@ Name & Type & Annotation\\
 This program is \reference{parallelized}{general.parallelization}.
 \clearpage
 %==================================
+\subsection{Gravityfield2GriddedTimeVariabilityAnalysis}\label{Gravityfield2GriddedTimeVariabilityAnalysis}
+This programm computes a time series of functionals of a \configClass{gravityfield}{gravityfieldType}
+on each point at a given \configClass{grid}{gridType}. The type of functional (e.g gravity anomalies or geoid heights)
+can be choosen with \configClass{kernel}{kernelType}. At each grid point the error root mean square (RMS),
+the correlation coefficient or the Nash-Sutcliffe coefficient (NSC) will be computed frome the time series
+with respect to the referencefield. The functional will be saved together with points expressed
+as ellipsoidal coordinates (longitude, latitude, height) based on a reference ellipsoid with parameters \config{R}
+and \config{inverseFlattening}. To speed up the computation the gravity field will be converted to
+spherical harmonics before the computation.
+
+To visualize the results use \program{PlotMap}.
+
+This programm is parallelized.
+
+
+\keepXColumns
+\begin{tabularx}{\textwidth}{N T A}
+\hline
+Name & Type & Annotation\\
+\hline
+\hfuzz=500pt\includegraphics[width=1em]{element-mustset.pdf}~outputfileGriddedData & \hfuzz=500pt filename & \hfuzz=500pt \\
+\hfuzz=500pt\includegraphics[width=1em]{element-mustset-unbounded.pdf}~grid & \hfuzz=500pt \hyperref[gridType]{grid} & \hfuzz=500pt \\
+\hfuzz=500pt\includegraphics[width=1em]{element-mustset.pdf}~kernel & \hfuzz=500pt \hyperref[kernelType]{kernel} & \hfuzz=500pt \\
+\hfuzz=500pt\includegraphics[width=1em]{element-mustset-unbounded.pdf}~gravityfield & \hfuzz=500pt \hyperref[gravityfieldType]{gravityfield} & \hfuzz=500pt \\
+\hfuzz=500pt\includegraphics[width=1em]{element-mustset-unbounded.pdf}~referencefield & \hfuzz=500pt \hyperref[gravityfieldType]{gravityfield} & \hfuzz=500pt gravity field to compare to\\
+\hfuzz=500pt\includegraphics[width=1em]{element-mustset.pdf}~functional & \hfuzz=500pt choice & \hfuzz=500pt correlation coefficient with respect to reference field\\
+\hfuzz=500pt\includegraphics[width=1em]{connector.pdf}\includegraphics[width=1em]{element-mustset.pdf}~correlationCoefficient & \hfuzz=500pt  & \hfuzz=500pt \\
+\hfuzz=500pt\includegraphics[width=1em]{connector.pdf}\includegraphics[width=1em]{element-mustset.pdf}~errorRMS & \hfuzz=500pt  & \hfuzz=500pt error rms with respect to reference field\\
+\hfuzz=500pt\includegraphics[width=1em]{connector.pdf}\includegraphics[width=1em]{element-mustset.pdf}~NSC & \hfuzz=500pt  & \hfuzz=500pt Nash-Sutcliffe-Coefficient with respect to reference field\\
+\hfuzz=500pt\includegraphics[width=1em]{connector.pdf}\includegraphics[width=1em]{element-mustset.pdf}~percentage & \hfuzz=500pt  & \hfuzz=500pt Percentage of reference field explained by signal\\
+\hfuzz=500pt\includegraphics[width=1em]{element-mustset-unbounded.pdf}~timeSeries & \hfuzz=500pt \hyperref[timeSeriesType]{timeSeries} & \hfuzz=500pt \\
+\hfuzz=500pt\includegraphics[width=1em]{element.pdf}~R & \hfuzz=500pt double & \hfuzz=500pt reference radius for ellipsoidal coordinates on output\\
+\hfuzz=500pt\includegraphics[width=1em]{element.pdf}~inverseFlattening & \hfuzz=500pt double & \hfuzz=500pt reference flattening for ellipsoidal coordinates on output, 0: spherical coordinates\\
+\hline
+\end{tabularx}
+
+\clearpage
+%==================================
 \subsection{Gravityfield2PotentialCoefficients}\label{Gravityfield2PotentialCoefficients}
 This program evaluates a time variable \configClass{gravityfield}{gravityfieldType}
 at a given \config{time} and saves it as a \file{spherical harmonics file}{potentialCoefficients}.
