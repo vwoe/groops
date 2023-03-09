@@ -2,27 +2,19 @@
 /**
 * @file sinex2StationPosition.cpp
 *
-* @brief Convert GNSS station positions from SINEX to InstrumentVector3d.
+* @brief DEPRECATED. Please use Sinex2StationPositions instead.
 *
 * @author Sebastian Strasser
 * @date 2016-12-07
+*
+* @deprecated Please use Sinex2StationPositions instead.
 */
 /***********************************************/
 
 // Latex documentation
 #define DOCSTRING docstring
 static const char *docstring = R"(
-Extracts station positions from \config{inputfileSinex}
-(\href{http://www.iers.org/IERS/EN/Organization/AnalysisCoordinator/SinexFormat/sinex.html}{SINEX format description})
-and writes an Instrument file \configFile{outputfileInstrument}{instrument} of type VECTOR3D
-for each station. Stations can be limited via \config{stationName}, otherwise all stations in \config{inputfileSinex} will be used.
-If \config{timeSeries} is provided, positions will be computed at these epochs based on velocity, otherwise reference epoch is used.
-If \config{extrapolateBackward} or \config{extrapolateForward} are provided, positions will also be computed for epochs
-before the first interval/after the last interval, based on the position and velocity of the first/last interval.
-If \config{inputfileDiscontinuities} is provided (one file per station, create with \program{Sinex2StationDiscontinuities}),
-position extrapolation will stop at the first discontinuity before the first interval/after the last interval.
-
-See also \program{Sinex2StationPostSeismicDeformation}.
+DEPRECATED. Please use \program{Sinex2StationPositions} instead.
 )";
 
 /***********************************************/
@@ -35,7 +27,7 @@ See also \program{Sinex2StationPostSeismicDeformation}.
 
 /***** CLASS ***********************************/
 
-/** @brief Convert GNSS station positions from SINEX to InstrumentVector3d.
+/** @brief DEPRECATED. Please use Sinex2StationPositions instead.
 * @ingroup programsConversionGroup */
 class Sinex2StationPosition
 {
@@ -62,7 +54,7 @@ public:
   void run(Config &config, Parallel::CommunicatorPtr comm);
 };
 
-GROOPS_REGISTER_PROGRAM(Sinex2StationPosition, SINGLEPROCESS, "Convert GNSS station positions from SINEX to InstrumentVector3d.", Conversion, Gnss, Instrument)
+GROOPS_REGISTER_PROGRAM(Sinex2StationPosition, SINGLEPROCESS, "DEPRECATED. Please use Sinex2StationPositions instead.", Deprecated)
 GROOPS_RENAMED_PROGRAM(GnssSinex2StationPosition, Sinex2StationPosition, date2time(2018, 12, 4))
 
 /***********************************************/
@@ -87,6 +79,8 @@ void Sinex2StationPosition::run(Config &config, Parallel::CommunicatorPtr /*comm
     readConfig(config, "extrapolateBackward",      extrapolateBackward,     Config::DEFAULT,   "0",       "also compute positions for epochs before first interval defined in SINEX file");
     if(isCreateSchema(config)) return;
 
+    logWarning<<"DEPRECATED. Please use Sinex2StationPositions instead."<<Log::endl;
+
     logStatus<<"read SINEX file <"<<fileNameSinex<<">"<<Log::endl;
     std::map<std::string, Station> stations;
     Sinex sinex;
@@ -102,8 +96,8 @@ void Sinex2StationPosition::run(Config &config, Parallel::CommunicatorPtr /*comm
 
       Interval interval;
       interval.solutionId = String::trim(line.substr(9, 4));
-      interval.timeStart  = Sinex::str2time(line, 16);
-      interval.timeEnd    = Sinex::str2time(line, 29);
+      interval.timeStart  = Sinex::str2time(line, 16, FALSE);
+      interval.timeEnd    = Sinex::str2time(line, 29, TRUE);
       stations[name].intervals.push_back(interval);
     }
     for(auto &station : stations)
@@ -127,7 +121,7 @@ void Sinex2StationPosition::run(Config &config, Parallel::CommunicatorPtr /*comm
       if(interval == stations[name].intervals.end())
         throw(Exception(name+": interval for solutionId "+solutionId+" not found"));
 
-      interval->referenceTime  = Sinex::str2time(line, 27);
+      interval->referenceTime  = Sinex::str2time(line, 27, FALSE);
       if(     parameterType == "STAX") interval->position.x() = value;
       else if(parameterType == "STAY") interval->position.y() = value;
       else if(parameterType == "STAZ") interval->position.z() = value;

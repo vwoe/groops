@@ -60,6 +60,7 @@ files/fileMeanPolarMotion.cpp
 files/fileNormalEquation.cpp
 files/fileOceanPoleTide.cpp
 files/fileParameterName.cpp
+files/filePlatform.cpp
 files/filePolygon.cpp
 files/fileSatelliteModel.cpp
 files/fileSphericalHarmonics.cpp
@@ -160,6 +161,7 @@ classes/parametrizationTemporal/parametrizationTemporalFourier.cpp
 classes/parametrizationTemporal/parametrizationTemporalOscillation.cpp
 classes/parametrizationTemporal/parametrizationTemporalPolynomial.cpp
 classes/parametrizationTemporal/parametrizationTemporalSplines.cpp
+classes/platformSelector/platformSelector.cpp
 classes/sphericalHarmonicsFilter/sphericalHarmonicsFilter.cpp
 classes/sphericalHarmonicsNumbering/sphericalHarmonicsNumbering.cpp
 classes/thermosphere/thermosphere.cpp
@@ -199,7 +201,6 @@ gnss/gnssProcessingStep/gnssProcessingStep.cpp
 gnss/gnssReceiverGenerator/gnssReceiverGenerator.cpp
 gnss/gnssReceiverGenerator/gnssReceiverGeneratorLowEarthOrbiter.cpp
 gnss/gnssReceiverGenerator/gnssReceiverGeneratorStationNetwork.cpp
-gnss/gnssTransceiverSelector/gnssTransceiverSelector.cpp
 gnss/gnssTransmitterGenerator/gnssTransmitterGenerator.cpp
 gnss/gnssTransmitterGenerator/gnssTransmitterGeneratorGnss.cpp
 gnss/gnss.cpp
@@ -376,6 +377,7 @@ programs/misc/magneticField2GriddedData.cpp
 programs/misc/matrix2EmpiricalCovariance.cpp
 programs/misc/matrixCalculate.cpp
 programs/misc/observationEquations2Files.cpp
+programs/misc/platformCreate.cpp
 programs/misc/potentialCoefficients2BlockMeanTimeSplines.cpp
 programs/misc/potentialCoefficients2DegreeAmplitudes.cpp
 programs/misc/radialBasisSplines2KernelCoefficients.cpp
@@ -464,15 +466,16 @@ programs/conversion/gnss/gnssGriddedDataTimeSeries2Ionex.cpp
 programs/conversion/gnss/gnssIonex2GriddedDataTimeSeries.cpp
 programs/conversion/gnss/gnssNormals2Sinex.cpp
 programs/conversion/gnss/gnssOrbex2StarCamera.cpp
+programs/conversion/gnss/gnssReceiver2RinexObservation.cpp
 programs/conversion/gnss/gnssRinexNavigation2OrbitClock.cpp
 programs/conversion/gnss/gnssSignalBias2SinexBias.cpp
 programs/conversion/gnss/gnssSinexBias2SignalBias.cpp
+programs/conversion/gnss/gnssStationLog2Platform.cpp
 programs/conversion/gnss/gnssStationLog2StationInfo.cpp
 programs/conversion/gnss/gnssTroposphere2TropoSinex.cpp
 programs/conversion/gnss/rinexObservation2GnssReceiver.cpp
 programs/conversion/gnss/sinex2StationDiscontinuities.cpp
-programs/conversion/gnss/sinex2StationPosition.cpp
-programs/conversion/gnss/sinex2StationPostSeismicDeformation.cpp
+programs/conversion/gnss/sinex2StationPositions.cpp
 programs/conversion/gnss/sinexMetadata2SatelliteModel.cpp
 programs/conversion/goce/goceXml2Gradiometer.cpp
 programs/conversion/goce/goceXml2Orbit.cpp
@@ -536,6 +539,9 @@ programs/conversion/sinex2Normals.cpp
 programs/conversion/sp3Format2Orbit.cpp
 programs/conversion/viennaMappingFunctionGrid2File.cpp
 programs/conversion/viennaMappingFunctionStation2File.cpp
+
+programs/deprecated/sinex2StationPosition.cpp
+programs/deprecated/sinex2StationPostSeismicDeformation.cpp
 
 groops.cpp
 )

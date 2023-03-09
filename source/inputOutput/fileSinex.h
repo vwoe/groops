@@ -19,7 +19,6 @@
 #include "inputOutput/fileName.h"
 #include "inputOutput/logging.h"
 #include "config/config.h"
-#include "files/fileGnssStationInfo.h"
 
 /***** TYPES ***********************************/
 
@@ -42,7 +41,7 @@ public:
   static std::string resize(std::string str, UInt length) {str.resize(length, ' '); return str;}
   static std::string format(Double value, UInt length=6, UInt precision=4);
   static std::string time2str(Time time, Bool fourDigitYear=FALSE);
-  static Time        str2time(const std::string &line, UInt pos, Bool fourDigitYear=FALSE);
+  static Time        str2time(const std::string &line, UInt pos, Bool zeroIsMaxTime, Bool fourDigitYear=FALSE);
 };
 
 /***********************************************/
