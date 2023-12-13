@@ -50,7 +50,7 @@ public:
   std::vector<Double>       clk;
   std::vector<Vector3d>     pos, vel;  // regularized marker pos in global system
   std::vector<Vector3d>     offset;    // pos to ARF in local system
-  std::vector<Transform3d>  global2local, local2antenna;
+  std::vector<Transform3d>  global2local, global2antenna;
   std::vector<GnssTrackPtr> tracks;   // tracking phase observations
   Double                    observationSampling;
   Bool                      integerAmbiguities;
@@ -97,13 +97,13 @@ public:
   /** @brief velocity in TRF or CRF [m/s]. */
   Vector3d velocity(UInt idEpoch) const {return vel.at(idEpoch);}
 
-  /** @brief Rotation from terrestrial reference frame (TRF) or celestial reference frame (CRF) to local/body frame (north, east, up or vehicle system). */
+  /** @brief Rotation from terrestrial reference frame (TRF) or celestial reference frame (CRF) to local horizont system (north, east, up). */
   Transform3d global2localFrame(UInt idEpoch) const {return global2local.at(idEpoch);}
 
-  /** @brief Rotation from local/body frame to left-handed antenna system (usually north, east, up). */
-  Transform3d local2antennaFrame(UInt idEpoch) const {return local2antenna.at(idEpoch);}
+  /** @brief Rotation from terrestrial reference frame (TRF) or celestial reference frame (CRF) to left-handed antenna system (usually north, east, up). */
+  Transform3d global2antennaFrame(UInt idEpoch) const {return global2antenna.at(idEpoch);}
 
-  /** @brief Transformation matrix for observed (composed) types from orignal transmitted types.
+  /** @brief Transformation matrix for observed (composed) types from original transmitted types.
   * E.g. C2DG = C1CG - C1WG + C2WG.
   * Returns the @a typesTrans and the transformation matrix @a A (dimension: types.size() times typesTrans.size()). */
   virtual void signalComposition(UInt /*idEpoch*/, const std::vector<GnssType> &types, std::vector<GnssType> &typesTrans, Matrix &A) const;
@@ -120,7 +120,7 @@ public:
   /** @brief Delete observation. */
   void deleteObservation(UInt idTrans, UInt idEpoch);
 
-  /** @brief Delete alle empty tracks (and ambiguities). */
+  /** @brief Delete all empty tracks (and ambiguities). */
   void deleteEmptyTracks();
 
   // Preprocessing
@@ -159,15 +159,16 @@ public:
 
   /** @brief Estimate coarse receiver clock errors from a Precise Point Positioning (PPP) code solution.
   * If @p estimateKinematicPosition is TRUE, the receiver position is estimated at each epoch, otherwise it is estimated once for all epochs.*/
-  void estimateInitialClockErrorFromCodeObservations(const std::vector<GnssTransmitterPtr> &transmitters, const std::function<Rotary3d(const Time &time)> &rotationCrf2Trf,
-                                                     const std::function<void(GnssObservationEquation &eqn)> &reduceModels,
-                                                     Double huber, Double huberPower, Double maxPosDiff, Bool estimateKinematicPosition);
+  std::vector<Vector3d> estimateInitialClockErrorFromCodeObservations(const std::vector<GnssTransmitterPtr> &transmitters,
+                                                                      const std::function<Rotary3d(const Time &time)> &rotationCrf2Trf,
+                                                                      const std::function<void(GnssObservationEquation &eqn)> &reduceModels,
+                                                                      Double huber, Double huberPower, Bool estimateKinematicPosition);
 
   /** @brief Disable epochs if reduced code observations @p eqn exceed @p threshold (e.g. 100+ km for code cycle slips).
   * Disable receiver at epoch if @p outlierRatio or more of the observed satellites have gross code outliers. */
   void disableEpochsWithGrossCodeObservationOutliers(ObservationEquationList &eqn, Double threshold, Double outlierRatio=0.5);
 
-  /** @brief Create tracks with continously identical phase observations.
+  /** @brief Create tracks with continuously identical phase observations.
   * Tracks may contain gaps but must contain observations in at least @p minObsCountPerTrack epochs.
   * Extra types are included (e.g. L5*G), but tracks must have at least two others phases at different frequencies.*/
   void createTracks(const std::vector<GnssTransmitterPtr> &transmitters, UInt minObsCountPerTrack, const std::vector<GnssType> &extraTypes={});

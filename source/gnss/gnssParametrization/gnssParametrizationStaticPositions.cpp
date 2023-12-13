@@ -89,24 +89,21 @@ void GnssParametrizationStaticPositions::init(Gnss *gnss, Parallel::Communicator
     // ----------------
     if(sigmaNoNetRotation || sigmaNoNetTranslation)
     {
-      selectedNoNetReceivers = gnss->selectReceivers(selectNoNetReceivers);
-      for(auto recv : gnss->receivers)
-        if(selectedNoNetReceivers.at(recv->idRecv()) && !recv->useable())
-          selectedNoNetReceivers.at(recv->idRecv()) = FALSE;
-      for(auto recv : gnss->receivers)
-        if(selectedNoNetReceivers.at(recv->idRecv()) && !selectedReceivers.at(recv->idRecv()))
-          throw(Exception(recv->name()+" for no-net constraints must be selected for position estimation too"));
+      std::vector<const Platform*> platforms(gnss->receivers.size(), nullptr);
+      for(UInt idRecv=0; idRecv<gnss->receivers.size(); idRecv++)
+        if(gnss->receivers.at(idRecv)->useable())
+          platforms.at(idRecv) = &gnss->receivers.at(idRecv)->platform;
 
       // no net positions
       noNetPos = pos;
       if(!fileNameNoNetPositions.empty())
         for(UInt idRecv=0; idRecv<selectedNoNetReceivers.size(); idRecv++)
-          if(selectedNoNetReceivers.at(idRecv))
+          if(platforms.at(idRecv))
           {
             try
             {
               VariableList fileNameVariableList;
-              addVariable("station", gnss->receivers.at(idRecv)->name(), fileNameVariableList);
+              fileNameVariableList.setVariable("station", gnss->receivers.at(idRecv)->name());
               Vector3dArc arc = InstrumentFile::read(fileNameNoNetPositions(fileNameVariableList));
               auto iter = (arc.size() == 1) ? arc.begin() : std::find_if(arc.begin(), arc.end(), [&](const Epoch &e){return e.time.isInInterval(gnss->times.front(), gnss->times.back());});
               if(iter == arc.end())
@@ -115,9 +112,14 @@ void GnssParametrizationStaticPositions::init(Gnss *gnss, Parallel::Communicator
             }
             catch(std::exception &/*e*/)
             {
-              selectedNoNetReceivers.at(idRecv) = FALSE;
+              platforms.at(idRecv) = nullptr;
             }
           }
+
+      selectedNoNetReceivers = selectNoNetReceivers->select(gnss->times.front(), gnss->times.back(), platforms);
+      for(auto recv : gnss->receivers)
+        if(selectedNoNetReceivers.at(recv->idRecv()) && !selectedReceivers.at(recv->idRecv()))
+          throw(Exception(recv->name()+" for no-net constraints must be selected for position estimation too"));
 
       const UInt countStation = std::count(selectedNoNetReceivers.begin(), selectedNoNetReceivers.end(), TRUE);
       logInfo<<"  "<<countStation<<" stations contribute to the computation of net translation/rotation"<<Log::endl;
@@ -385,7 +387,7 @@ void GnssParametrizationStaticPositions::writeResults(const GnssNormalEquationIn
     if(!fileNamePosition.empty())
     {
       VariableList fileNameVariableList;
-      addVariable("station", "****", fileNameVariableList);
+      fileNameVariableList.setVariable("station", "****");
       logStatus<<"write positions to files <"<<fileNamePosition(fileNameVariableList).appendBaseName(suffix)<<">"<<Log::endl;
       for(UInt idRecv=0; idRecv<index.size(); idRecv++)
         if(index.at(idRecv) && gnss->receivers.at(idRecv)->isMyRank())
@@ -395,7 +397,7 @@ void GnssParametrizationStaticPositions::writeResults(const GnssNormalEquationIn
           epoch.vector3d = pos.at(idRecv);
           Vector3dArc arc;
           arc.push_back(epoch);
-          fileNameVariableList["station"]->setValue(gnss->receivers.at(idRecv)->name());
+          fileNameVariableList.setVariable("station", gnss->receivers.at(idRecv)->name());
           InstrumentFile::write(fileNamePosition(fileNameVariableList).appendBaseName(suffix), arc);
         }
     }

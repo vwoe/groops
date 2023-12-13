@@ -28,7 +28,7 @@ interpreted as a factor that is multiplied to the accuracy derived from the accu
 (see \configFile{inputfileAccuracyDefinition}{gnssAntennaDefinition} in \configClass{receiver}{gnssReceiverGeneratorType}).
 
 The \configClass{parametrization}{gnssParametrizationType} are used to simulate a priori models (e.g. troposphere, signal biases).
-Parameter settings and outputfiles are irgnored.
+Parameter settings and outputfiles are ignored.
 
 If the program is run on multiple processes the \configClass{receiver}{gnssReceiverGeneratorType}s
 (stations or LEO satellites) are distributed over the processes.
@@ -151,7 +151,7 @@ void GnssSimulateReceiver::run(Config &config, Parallel::CommunicatorPtr comm)
     if(!fileNameReceiver.empty())
     {
       VariableList fileNameVariableList;
-      addVariable("station", "****", fileNameVariableList);
+      fileNameVariableList.setVariable("station", "****");
       logStatus<<"write receiver observations to files <"<<fileNameReceiver(fileNameVariableList)<<">"<<Log::endl;
       for(auto recv : gnss.receivers)
         if(recv->isMyRank())
@@ -198,7 +198,7 @@ void GnssSimulateReceiver::run(Config &config, Parallel::CommunicatorPtr comm)
                 arc.push_back(epoch);
             } // for(idEpoch)
 
-          fileNameVariableList["station"]->setValue(recv->name());
+          fileNameVariableList.setVariable("station", recv->name());
           InstrumentFile::write(fileNameReceiver(fileNameVariableList), arc);
         } // for(recv)
     } // if(fileNameReceiver)
@@ -210,7 +210,7 @@ void GnssSimulateReceiver::run(Config &config, Parallel::CommunicatorPtr comm)
     if(!fileNameClock.empty())
     {
       VariableList fileNameVariableList;
-      addVariable("station", "****", fileNameVariableList);
+      fileNameVariableList.setVariable("station", "****");
       logStatus<<"write receiver clocks to files <"<<fileNameClock(fileNameVariableList)<<">"<<Log::endl;
       for(auto recv : gnss.receivers)
         if(recv->isMyRank())
@@ -224,7 +224,7 @@ void GnssSimulateReceiver::run(Config &config, Parallel::CommunicatorPtr comm)
               epoch.value = recv->clockError(idEpoch);
               arc.push_back(epoch);
             }
-          fileNameVariableList["station"]->setValue(recv->name());
+          fileNameVariableList.setVariable("station", recv->name());
           InstrumentFile::write(fileNameClock(fileNameVariableList), arc);
         } // for(recv)
     } // if(fileNameClock)
