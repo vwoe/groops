@@ -647,7 +647,7 @@ public:
   std::string   name() const override {return "sqrt";}
   ExpressionPtr create(const ExpressionPtr &ob) const override {return std::make_shared<ExpressionSqrt>(ob);}
   Double        evaluate(const VariableList &varList) const override {return std::sqrt(operand->evaluate(varList));}
-  ExpressionPtr derivative(const std::string &var) const override {return operand->derivative(var)/sqrt(operand->clone());}
+  ExpressionPtr derivative(const std::string &var) const override {return operand->derivative(var)/(exprValue(2.0)*sqrt(operand->clone()));}
 };
 FUNCLIST1(ExpressionSqrt)
 
@@ -1584,6 +1584,8 @@ void ExpressionVariable::simplify(VariableList &varList)
       {
         value  = expr->evaluate(varList2);
         status = VALUE;
+        this->varList.map.clear();
+        expr = nullptr;
         return;
       }
 

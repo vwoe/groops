@@ -17,7 +17,7 @@
 // Latex documentation
 #ifdef DOCSTRING_Loop
 static const char *docstringLoopLoop = R"(
-\subsection{Loop}
+\subsection{Loop}\label{loopType:loop}
 Loop over nested loops. First \config{loop} is outermost loop, every subsequent \config{loop} is one level below the previous \config{loop}.
 )";
 #endif
@@ -30,13 +30,12 @@ Loop over nested loops. First \config{loop} is outermost loop, every subsequent 
 /***** CLASS ***********************************/
 
 /** @brief Loop over nested loops.
-* @ingroup LoopGroup
+* @ingroup loopGroup
 * @see Loop */
 class LoopLoop : public Loop
 {
   std::vector<Config>  loopConfigs;
   std::vector<LoopPtr> loops;
-  UInt                 index;
   std::string          nameIndex;
 
 public:
@@ -55,12 +54,12 @@ inline LoopLoop::LoopLoop(Config &config)
   try
   {
     readConfigLater(config, "loop", loops, loopConfigs, Config::MUSTSET,  "", "subloop");
-    readConfig(config, "variableLoopIndex",  nameIndex,   Config::OPTIONAL, "", "variable with index of current iteration (starts with zero)");
+    readConfig(config, "variableLoopIndex",  nameIndex, Config::OPTIONAL, "", "variable with index of current iteration (starts with zero)");
+    readConfigCondition(config);
     if(isCreateSchema(config))
       return;
 
     loops.resize(loopConfigs.size());
-    index = 0;
   }
   catch(std::exception &e)
   {
@@ -76,7 +75,7 @@ inline UInt LoopLoop::count() const
   for(auto loop : loops)
     if(loop)
       count *= loop->count();
-  return std::max(index, count);
+  return std::max(index(), count);
 }
 
 /***********************************************/
@@ -94,12 +93,13 @@ inline Bool LoopLoop::iteration(VariableList &varList)
       return FALSE;
     };
 
-    if(index == 0)
+    if(index() == 0)
     {
+      if(!initLoop(0))
+        return FALSE;
       if(!nameIndex.empty())
-        varList.setVariable(nameIndex, index);
-      index++;
-      return initLoop(0);
+        varList.setVariable(nameIndex, index());
+      return checkCondition(varList);
     }
 
     for(UInt i=loops.size(); i-->0;)
@@ -107,9 +107,8 @@ inline Bool LoopLoop::iteration(VariableList &varList)
         if((i+1 >= loops.size()) || initLoop(i+1))
         {
           if(!nameIndex.empty())
-            varList.setVariable(nameIndex, index);
-          index++;
-          return TRUE;
+            varList.setVariable(nameIndex, index());
+          return checkCondition(varList);
         }
 
     return FALSE;

@@ -16,7 +16,7 @@
 // Latex documentation
 #ifdef DOCSTRING_Loop
 static const char *docstringLoopPlatformEquipment = R"(
-\subsection{PlatformEquipment}
+\subsection{PlatformEquipment}\label{loopType:platformEquipment}
 Loop over specific equipment of a \file{platform file}{platform}.
 )";
 #endif
@@ -30,7 +30,7 @@ Loop over specific equipment of a \file{platform file}{platform}.
 /***** CLASS ***********************************/
 
 /** @brief Loop over equipment of a platform file.
-* @ingroup LoopGroup
+* @ingroup loopGroup
 * @see Loop */
 class LoopPlatformEquipment : public Loop
 {
@@ -39,7 +39,6 @@ class LoopPlatformEquipment : public Loop
   std::string             nameName, nameSerial, nameInfo, nameTimeStart, nameTimeEnd;
   std::string             nameIndex, nameCount;
   std::string             namePositionX, namePositionY, namePositionZ;
-  UInt                    index;
 
 public:
   LoopPlatformEquipment(Config &config);
@@ -63,10 +62,13 @@ inline LoopPlatformEquipment::LoopPlatformEquipment(Config &config)
     readConfig(config, "inputfilePlatform", fileName, Config::MUSTSET, "", "platform info file");
     if(readConfigChoice(config, "equipmentType", choice, Config::MUSTSET, "", "equipment type to loop over"))
     {
-      if(readConfigChoiceElement(config, "all",          choice, "loop over all types"))    type = PlatformEquipment::UNDEFINED;
-      if(readConfigChoiceElement(config, "gnssAntenna",  choice, "loop over antennas"))     type = PlatformEquipment::GNSSANTENNA;
-      if(readConfigChoiceElement(config, "gnssReceiver", choice, "loop over receivers"))    type = PlatformEquipment::GNSSRECEIVER;
-      if(readConfigChoiceElement(config, "other",        choice, "loop over other types"))  type = PlatformEquipment::OTHER;
+      if(readConfigChoiceElement(config, "all",                 choice, "loop over all types"))             type = PlatformEquipment::UNDEFINED;
+      if(readConfigChoiceElement(config, "gnssAntenna",         choice, "loop over antennas"))              type = PlatformEquipment::GNSSANTENNA;
+      if(readConfigChoiceElement(config, "gnssReceiver",        choice, "loop over receivers"))             type = PlatformEquipment::GNSSRECEIVER;
+      if(readConfigChoiceElement(config, "slrStation",          choice, "loop over SLR stations"))          type = PlatformEquipment::SLRSTATION;
+      if(readConfigChoiceElement(config, "slrRetroReflector",   choice, "loop over laser retroreflectors")) type = PlatformEquipment::LASERRETROREFLECTOR;
+      if(readConfigChoiceElement(config, "satelliteIdentifier", choice, "loop over satellite identifiers")) type = PlatformEquipment::SATELLITEIDENTIFIER;
+      if(readConfigChoiceElement(config, "other",               choice, "loop over other types"))           type = PlatformEquipment::OTHER;
       endChoice(config);
     }
     readConfig(config, "variableLoopName",      nameName,            Config::OPTIONAL,  "loopName",      "variable with name");
@@ -79,10 +81,10 @@ inline LoopPlatformEquipment::LoopPlatformEquipment(Config &config)
     readConfig(config, "variableLoopPositionY", namePositionZ,       Config::OPTIONAL,  "loopPositionZ", "variable with position z");
     readConfig(config, "variableLoopIndex",     nameIndex,           Config::OPTIONAL,  "",              "variable with index of current iteration (starts with zero)");
     readConfig(config, "variableLoopCount",     nameCount,           Config::OPTIONAL,  "",              "variable with total number of iterations");
+    readConfigCondition(config);
     if(isCreateSchema(config)) return;
 
     readFilePlatform(fileName, platform);
-    index = 0;
   }
   catch(std::exception &e)
   {
@@ -94,14 +96,14 @@ inline LoopPlatformEquipment::LoopPlatformEquipment(Config &config)
 
 inline Bool LoopPlatformEquipment::iteration(VariableList &varList)
 {
-  if(index >= count())
+  if(index() >= count())
     return FALSE;
 
   UInt idx = 0;
   for(const auto &eq : platform.equipments)
-    if(((type == PlatformEquipment::UNDEFINED) || (eq->getType() == type)) && (idx++ == index))
+    if(((type == PlatformEquipment::UNDEFINED) || (eq->getType() == type)) && (idx++ == index()))
     {
-      if(!nameIndex.empty())     varList.setVariable(nameIndex,     index);
+      if(!nameIndex.empty())     varList.setVariable(nameIndex,     index());
       if(!nameCount.empty())     varList.setVariable(nameCount,     count());
       if(!nameName.empty())      varList.setVariable(nameName,      eq->name);
       if(!nameSerial.empty())    varList.setVariable(nameSerial,    eq->serial);
@@ -116,16 +118,13 @@ inline Bool LoopPlatformEquipment::iteration(VariableList &varList)
         {
           case PlatformEquipment::GNSSANTENNA:  varList.setVariable(nameInfo, std::dynamic_pointer_cast<PlatformGnssAntenna>(eq)->radome); break;
           case PlatformEquipment::GNSSRECEIVER: varList.setVariable(nameInfo, std::dynamic_pointer_cast<PlatformGnssReceiver>(eq)->version); break;
-          case PlatformEquipment::OTHER:        break;
-          case PlatformEquipment::UNDEFINED:    break;
-          default:                              break;
+          default: break;
         }
       }
       break;
     }
 
-  index++;
-  return TRUE;
+  return checkCondition(varList);
 }
 
 /***********************************************/

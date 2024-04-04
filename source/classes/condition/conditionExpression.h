@@ -16,7 +16,7 @@
 // Latex documentation
 #ifdef DOCSTRING_Condition
 static const char *docstringConditionExpression = R"(
-\subsection{Expression}
+\subsection{Expression}\label{conditionType:expression}
 Evaluate expression.
 )";
 #endif
@@ -29,7 +29,7 @@ Evaluate expression.
 /***** CLASS ***********************************/
 
 /** @brief Evaluate expression.
-* @ingroup ConditionGroup
+* @ingroup conditionGroup
 * @see Condition */
 class ConditionExpression : public Condition
 {

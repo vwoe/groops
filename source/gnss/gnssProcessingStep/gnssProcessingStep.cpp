@@ -164,7 +164,7 @@ GnssProcessingStep::State::State(GnssPtr gnss, Parallel::CommunicatorPtr comm) :
 
 /***********************************************/
 
-void GnssProcessingStep::State::regularizeNotUsedParameters(UInt blockStart, UInt blockCount)
+void GnssProcessingStep::State::regularizeNotUsedParameters(UInt blockStart, UInt blockCount, const std::vector<ParameterName> &parameterNames)
 {
   try
   {
@@ -178,7 +178,7 @@ void GnssProcessingStep::State::regularizeNotUsedParameters(UInt blockStart, UIn
           {
             N(k,k) += 1.0;
             countZeros++;
-            logWarning<<"    "<<normalEquationInfo.parameterNames().at(normals.blockIndex(i)+k).str()<<" has zero diagonal element"<<Log::endl;
+            logWarning<<"    "<<parameterNames.at(normals.blockIndex(i)+k).str()<<" has zero diagonal element"<<Log::endl;
           }
       }
     Parallel::reduceSum(countZeros, 0, normals.communicator());
@@ -275,7 +275,8 @@ void GnssProcessingStep::State::buildNormals(Bool constraintsOnly, Bool solveEpo
 {
   try
   {
-    normals.initEmpty(normalEquationInfo.blockIndices(), normalEquationInfo.comm);
+    normals.initEmpty(normalEquationInfo.blockIndices(), normalEquationInfo.comm,
+                      std::bind(&GnssNormalEquationInfo::normalsBlockRank, &normalEquationInfo, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3));
     n.resize(normals.blockCount());
     for(UInt i=0; i<normals.blockCount(); i++)
       n.at(i) = Vector(normals.blockSize(i));
@@ -345,7 +346,7 @@ void GnssProcessingStep::State::buildNormals(Bool constraintsOnly, Bool solveEpo
 
       if(solveEpochParameters && !constraintsOnly)
       {
-        regularizeNotUsedParameters(blockStart, blockCount);
+        regularizeNotUsedParameters(blockStart, blockCount, normalEquationInfo.parameterNames());
         normals.cholesky(FALSE, blockStart, blockCount, FALSE);
         normals.triangularTransSolve(n, blockStart, blockCount, FALSE);
         if(Parallel::isMaster(normalEquationInfo.comm))
@@ -410,7 +411,7 @@ Double GnssProcessingStep::State::estimateSolution(const std::function<Vector(co
     logStatus<<"solve"<<Log::endl;
     const UInt blockStart = (solveEpochParameters) ? normalEquationInfo.blockInterval() : 0; // epoch parameters already eliminated?
     const UInt blockCount = ((searchInteger) ? normalEquationInfo.blockAmbiguity() : normals.blockCount()) - blockStart;
-    regularizeNotUsedParameters(blockStart, normals.blockCount()-blockStart);
+    regularizeNotUsedParameters(blockStart, normals.blockCount()-blockStart, normalEquationInfo.parameterNames());
     normals.cholesky(TRUE/*timing*/, blockStart, blockCount, TRUE/*collect*/);
     normals.triangularTransSolve(n, blockStart, blockCount, TRUE/*collect*/); // forward step
     if(Parallel::isMaster(normalEquationInfo.comm))

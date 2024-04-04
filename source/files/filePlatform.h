@@ -106,17 +106,21 @@ public:
 class PlatformEquipment
 {
 public:
-  enum Type : Int {UNDEFINED    = 0,
-                   OTHER        = 1,
-                   GNSSANTENNA  = 2,
-                   GNSSRECEIVER = 3,
-                   SLRSTATION   = 4};
+  enum Type : Int {UNDEFINED           = 0,
+                   OTHER               = 1,
+                   GNSSANTENNA         = 2,
+                   GNSSRECEIVER        = 3,
+                   SLRSTATION          = 4,
+                   LASERRETROREFLECTOR = 5,
+                   SATELLITEIDENTIFIER = 6};
 
   static constexpr Type TYPE = OTHER;
   std::string comment;
   std::string name, serial;
   Time        timeStart, timeEnd;
   Vector3d    position;   // position of instrument in north, east, up or vehicle system
+
+  virtual ~PlatformEquipment() {}
 
   /** @brief Create Equipment of given type (as shared_ptr). */
   static PlatformEquipmentPtr create(Type type);
@@ -168,6 +172,36 @@ class PlatformSlrStation : public PlatformEquipment
 {
 public:
   static constexpr Type TYPE = SLRSTATION;
+  Type getType() const override {return TYPE;}
+  std::string str() const override {return name;}
+  void save(OutArchive &oa) const override;
+  void load(InArchive  &ia) override;
+};
+
+/***** CLASS ***********************************/
+
+class PlatformLaserRetroReflector : public PlatformEquipment
+{
+public:
+  static constexpr Type TYPE = LASERRETROREFLECTOR;
+  Transform3d platform2reflectorFrame; // satellite system -> reflector system
+  Angle       dZenit;
+  Matrix      range;                   // range variations (azimut(0..360) x zenit(0..dZenit*rows))
+
+  Type getType() const override {return TYPE;}
+  std::string str() const override {return name;}
+  void save(OutArchive &oa) const override;
+  void load(InArchive  &ia) override;
+};
+
+/***** CLASS ***********************************/
+
+class PlatformSatelliteIdentifier : public PlatformEquipment
+{
+public:
+  static constexpr Type TYPE = SATELLITEIDENTIFIER;
+  std::string cospar, norad, sic, sp3;
+
   Type getType() const override {return TYPE;}
   std::string str() const override {return name;}
   void save(OutArchive &oa) const override;

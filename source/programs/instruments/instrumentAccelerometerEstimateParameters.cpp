@@ -45,7 +45,6 @@ The estimated parameters are written to the file \configFile{outputfileSolution}
 class InstrumentAccelerometerEstimateParameters
 {
   InstrumentFile                 accFile, accFileSim, orbitFile, starCameraFile;
-  Double                         margin;
   EarthRotationPtr               earthRotation;
   EphemeridesPtr                 ephemerides;
   ParametrizationAccelerationPtr parameterAcceleration;
@@ -130,7 +129,7 @@ void InstrumentAccelerometerEstimateParameters::run(Config &config, Parallel::Co
     readConfig(config, "inputfileOrbit",                  fileNameInOrbit,                  Config::OPTIONAL, "",      "may be needed by parametrizationAcceleration");
     readConfig(config, "inputfileStarCamera",             fileNameInStarCamera,             Config::OPTIONAL, "",      "may be needed by parametrizationAcceleration");
     readConfig(config, "inputfileSatelliteModel",         fileNameInSatelliteModel,         Config::OPTIONAL, "{groopsDataDir}/satelliteModel/", "satellite macro model (may be needed by parametrizationAcceleration)");
-    readConfig(config, "earthRotation",                   earthRotation,                    Config::OPTIONAL, "",      "may be needed by parametrizationAcceleration");
+    readConfig(config, "earthRotation",                   earthRotation,                    Config::OPTIONAL, "file",  "may be needed by parametrizationAcceleration");
     readConfig(config, "ephemerides",                     ephemerides,                      Config::OPTIONAL, "jpl",   "may be needed by parametrizationAcceleration");
     readConfig(config, "parametrizationAcceleration",     parameterAcceleration,            Config::MUSTSET,  "",      "");
     readConfig(config, "sigmaX",                          sigmaX,                           Config::DEFAULT,  "1e-9",  "apriori accuracy in x-axis");
